@@ -153,12 +153,77 @@ package com.pao.laboratory03.bonus;
  * === Excepții ===
  * TaskNotFoundException: Task-ul 'T999' nu a fost găsit
  */
+
+
+import java.util.*;
+
 public class Main {
     public static void main(String[] args) {
-        // TODO: implementează toți cei 10 pași de mai sus
-        // Creează TOATE clasele necesare în acest pachet (bonus/)
-        // Nu ai subpachete impuse — organizează cum consideri
+
+        TaskService service = TaskService.getInstance();
+
+        System.out.println("=== Adăugare task-uri ===");
+        Task t1 = service.addTask("Fix login bug", Priority.CRITICAL);
+        Task t2 = service.addTask("Add dark mode", Priority.LOW);
+        Task t3 = service.addTask("Update docs", Priority.MEDIUM);
+        Task t4 = service.addTask("Fix memory leak", Priority.HIGH);
+        Task t5 = service.addTask("Refactor DB layer", Priority.HIGH);
+
+        System.out.println(t1);
+        System.out.println(t2);
+        System.out.println(t3);
+        System.out.println(t4);
+        System.out.println(t5);
+
+        System.out.println("\n=== Asignare ===");
+        service.assignTask(t1.getId(), "Ana");
+        service.assignTask(t3.getId(), "Mihai");
+        service.assignTask(t4.getId(), "Elena");
+
+        System.out.println("\n=== Schimbări status ===");
+        try {
+            service.changeStatus(t1.getId(), Status.IN_PROGRESS);
+            service.changeStatus(t1.getId(), Status.DONE);
+            service.changeStatus(t3.getId(), Status.IN_PROGRESS);
+
+            // invalid
+            service.changeStatus(t1.getId(), Status.TODO);
+
+        } catch (InvalidTransitionException e) {
+            System.out.println("InvalidTransitionException: " + e.getMessage());
+        }
+
+        System.out.println("\n=== Task-uri HIGH ===");
+        List<Task> highTasks = service.getTasksByPriority(Priority.HIGH);
+        for (Task t : highTasks) {
+            System.out.println(t);
+        }
+
+        System.out.println("\n=== Sumar status ===");
+        Map<Status, Long> summary = service.getStatusSummary();
+        for (Map.Entry<Status, Long> entry : summary.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+
+        System.out.println("\n=== Task-uri neasignate ===");
+        List<Task> unassigned = service.getUnassignedTasks();
+        for (Task t : unassigned) {
+            System.out.println(t.getId() + ": " + t.getTitle());
+        }
+
+        System.out.println("\n=== Scor urgență ===");
+        System.out.println("Total: " + service.getTotalUrgencyScore(5));
+
+        System.out.println("\n=== Audit Log ===");
+
+        service.printAuditLog();
+
+        System.out.println("\n=== Excepții ===");
+
+        try {
+            service.changeStatus("T999", Status.DONE);
+        } catch (TaskNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
-
-

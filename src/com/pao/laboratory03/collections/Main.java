@@ -1,5 +1,5 @@
 package com.pao.laboratory03.collections;
-
+import java.util.*;
 /**
  * Exercițiul 1 — Colecții: HashMap și TreeMap
  *
@@ -48,9 +48,57 @@ package com.pao.laboratory03.collections;
  * Studenți la PAOJ: [Ana, Mihai, Ion]
  * Studenți la BD (actualizat): [Ana, Elena, George]
  */
+
+/*
+* Rezolvare exdercitiu 1
+* */
+
+
 public class Main {
     public static void main(String[] args) {
         // TODO: implementează cele 3 părți de mai sus
+        String[] words = {"java", "python", "java", "c++", "python", "java", "rust", "c++", "go"};
+        Map<String, Integer> aparitii = new HashMap<>();
+        for (String word : words) {
+            aparitii.put(word, aparitii.getOrDefault(word, 0) + 1);
+            /// am incrementat contorul pentru numarul de aparitii al cuvantului
+
+        }
+        System.out.println("---------------------------------subpunctul a ----------------------------------" );
+        System.out.println("Afisare map: " + aparitii);
+
+        if(aparitii.containsKey("rust"))
+            System.out.println("CONTINE RUST");
+        else
+            System.out.println("NU CONTINE RUST");
+        System.out.println("Chei: " + aparitii.keySet());
+        System.out.println("Valori: " + aparitii.values());
+
+        for (Map.Entry<String, Integer> entry : aparitii.entrySet()) {
+            System.out.println(entry.getKey() + " -> " + entry.getValue());
+        }
+
+        System.out.println("---------------------------subpunctul b ------------------------------------ " );
+        TreeMap<String, Integer> tree = new TreeMap<>(aparitii);
+        System.out.println("Afisare treemap: " + tree);
+        System.out.println("prima cheie: " + tree.firstKey());
+        System.out.println("ultima cheie: " + tree.lastKey());
+
+        System.out.println("--------------------------subpunctul c --------------------------------" );
+        Map<String, List<String>> materii = new HashMap<>();
+        materii.put("PAOJ", new ArrayList<>(Arrays.asList("Ana", "Mihai", "Ion")));
+        materii.put("BD", new ArrayList<>(Arrays.asList("Ana", "Elena", "Crina", "Ciprian")));
+
+        System.out.println("Studenti la PAOJ: " + materii.get("PAOJ"));
+
+        materii.get("BD").add("George");
+        System.out.println("Studenți la BD dupa modificari: " + materii.get("BD"));
+
+
+
+
+
+
     }
 }
 
