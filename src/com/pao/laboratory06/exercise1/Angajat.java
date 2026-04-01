@@ -29,4 +29,5 @@ public class Angajat {
     public double getSalariu() {
         return salariu;
     }
+
 }
