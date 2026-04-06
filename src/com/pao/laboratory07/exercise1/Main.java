@@ -7,11 +7,11 @@ import com.pao.laboratory07.exercise1.exceptions.OrderIsAlreadyFinalException;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
         Scanner scanner = new Scanner(System.in);
         // Part A
         // load initial state
-        OrderState initialState = OrderState.valueOf(scanner.next());
+        StareComanda initialState = StareComanda.valueOf(scanner.next());
         Order order = new Order(initialState);
         System.out.println("Initial order state: " + initialState);
 
