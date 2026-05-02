@@ -31,31 +31,42 @@ public class Main {
         }
 
         // Serialize
+
+        /// creaza un director numit output daca nu exista deja
         File outputDir = new File("output");
         if (!outputDir.exists()) {
             outputDir.mkdirs();
         }
 
+        /// descchide un fisier si scrie in el lista de tranzactii folosind java serialization
+        /// transforma lista de obiecte in fisier binar
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
             oos.writeObject(tranzactii);
         }
 
         // Deserialize
+
+        ///  deschide fisierul de output si reconstruieste obiectele asa cum erau ele in memorie
         List<Tranzactie> deserializate;
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_PATH))) {
             deserializate = (List<Tranzactie>) ois.readObject();
         }
 
-        // Process commands until EOF
+        ///  programul citeste linie cu linie pana la eof
         while (scanner.hasNextLine()) {
             String linie = scanner.nextLine().trim();
             if (linie.isEmpty()) continue;
 
+
+            //practic o instantiere a optiunilor
+
+            //daca scriu list imi afiseaza toate tranzactiile
             if (linie.equals("LIST")) {
                 for (Tranzactie t : deserializate) {
                     System.out.println(t);
                 }
-            } else if (linie.startsWith("FILTER ")) {
+            } ///comanda filter cu un prefix
+            else if (linie.startsWith("FILTER ")) {
                 String prefix = linie.substring(7).trim();
                 List<Tranzactie> filtrate = new ArrayList<>();
                 for (Tranzactie t : deserializate) {
@@ -70,7 +81,9 @@ public class Main {
                         System.out.println(t);
                     }
                 }
-            } else if (linie.startsWith("NOTE ")) {
+            }
+            /// cauta o tranzactie dupa id si ia nota
+            else if (linie.startsWith("NOTE ")) {
                 int targetId = Integer.parseInt(linie.substring(5).trim());
                 Tranzactie gasita = null;
                 for (Tranzactie t : deserializate) {
