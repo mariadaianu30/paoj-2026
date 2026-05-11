@@ -1,13 +1,15 @@
-package com.pao.laboratory10.exercise1;
+package com.pao.laboratory10.exercise2;
+
+import com.pao.laboratory10.exercise1.TipTranzactie;
 
 public class Tranzactie {
 
     private int id;
     private double suma;
     private String data;
-    private TipTranzactie tip;
+    private com.pao.laboratory10.exercise1.TipTranzactie tip;
 
-    public Tranzactie(int id, double suma, String data, TipTranzactie tip) {
+    public Tranzactie(int id, double suma, String data, com.pao.laboratory10.exercise1.TipTranzactie tip) {
         this.id = id;
         this.suma = suma;
         this.data = data;
