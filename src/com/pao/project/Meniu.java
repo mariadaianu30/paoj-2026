@@ -1,6 +1,9 @@
 package com.pao.project;
 
 import com.pao.project.audit.AuditService;
+import com.pao.project.db.repository.MedicRepository;
+import com.pao.project.db.repository.PacientRepository;
+import com.pao.project.db.repository.ProgramareRepository;
 import com.pao.project.exception.MedicNedisponibilException;
 import com.pao.project.exception.PacientNegasitException;
 import com.pao.project.exception.ProgramareConflictException;
@@ -53,6 +56,7 @@ public class Meniu {
         System.out.println("12. Ranking medici");
         System.out.println("13. Pacienti pe tip asigurare");
         System.out.println("14. Adauga analiza la pacient");
+        System.out.println("15. Vizualizare audit");
         System.out.println(" 0. Iesire");
         System.out.println("=====================================");
         System.out.print("Optiunea ta: ");
@@ -82,6 +86,7 @@ public class Meniu {
             case 12 -> listeazaMediciDupaRanking();
             case 13 -> afiseazaPacientiPeAsigurare();
             case 14 -> adaugaAnalizaPacient();
+            case 15 -> afiseazaAudit();
             case 0  -> System.out.println("La revedere!");
             default -> System.out.println("Optiune invalida. Incercati din nou.");
         }
@@ -97,6 +102,7 @@ public class Meniu {
         try {
             pacientService.adaugaPacient(p);
             System.out.println("Pacient inregistrat: " + p.getNumeComplet());
+            salveazaInDb("pacient", () -> PacientRepository.getInstance().save(p));
         } catch (IllegalArgumentException e) {
             System.out.println("Eroare: " + e.getMessage());
         }
@@ -127,6 +133,7 @@ public class Meniu {
             Medic m = new Medic(idAngajat, nume, prenume, cnp, adresa, salariu, program, parafa, vals[idx]);
             medicService.adaugaMedic(m);
             System.out.println("Medic adaugat: " + m.getNumeComplet() + " — " + m.getRol());
+            salveazaInDb("medic", () -> MedicRepository.getInstance().save(m));
         } catch (Exception e) {
             System.out.println("Eroare: " + e.getMessage());
         }
@@ -193,6 +200,7 @@ public class Meniu {
         try {
             programareService.adaugaProgramare(p);
             System.out.println("Programare creata: " + p);
+            salveazaInDb("programare", () -> ProgramareRepository.getInstance().save(p));
         } catch (ProgramareConflictException e) {
             System.out.println("Eroare: " + e.getMessage());
         }
@@ -475,6 +483,40 @@ public class Meniu {
             System.out.println("Analiza \"" + numAnaliza + "\" adaugata pentru " + pacient.getNumeComplet() + ".");
         } catch (IllegalArgumentException e) {
             System.out.println("Eroare: " + e.getMessage());
+        }
+    }
+
+
+    //  15. Vizualizare audit
+
+    private void afiseazaAudit() {
+        AuditService.getInstance().log("VIZUALIZARE_AUDIT");
+        List<String> intrari = AuditService.getInstance().getEntries();
+        String separator = "─".repeat(55);
+        System.out.println("\n" + separator);
+        System.out.println("  LOG AUDIT — audit.csv (" + intrari.size() + " intrari)");
+        System.out.println(separator);
+        if (intrari.isEmpty()) {
+            System.out.println("  (fisierul este gol)");
+        } else {
+            System.out.printf("  %-35s %s%n", "ACTIUNE", "TIMESTAMP");
+            System.out.println(separator);
+            for (String linie : intrari) {
+                String[] p = linie.split(",", 2);
+                if (p.length == 2) System.out.printf("  %-35s %s%n", p[0], p[1]);
+                else               System.out.println("  " + linie);
+            }
+        }
+        System.out.println(separator);
+    }
+
+    // Helper — incearca sa salveze in DB; afiseaza avertisment daca nu reuseste
+    private void salveazaInDb(String entitate, Runnable operatie) {
+        try {
+            operatie.run();
+            System.out.println("[DB] " + entitate + " salvat(a) cu succes.");
+        } catch (Exception e) {
+            System.out.println("[DB] Avertisment — " + entitate + " nu s-a salvat: " + e.getMessage());
         }
     }
 
