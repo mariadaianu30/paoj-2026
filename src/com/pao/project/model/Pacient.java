@@ -67,4 +67,5 @@ public class Pacient extends Persoana implements Comparable<Pacient> {
     public String getTipAsigurare() { return tipAsigurare; }
     public FisaMedicala getFisaMedicala() { return fisaMedicala; }
     public void setTipAsigurare(String tipAsigurare) { this.tipAsigurare = tipAsigurare; }
+    public void setDataInscriere(LocalDate dataInscriere) { this.dataInscriere = dataInscriere; }
 }

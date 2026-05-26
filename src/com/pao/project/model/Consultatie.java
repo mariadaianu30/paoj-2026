@@ -19,6 +19,14 @@ public class Consultatie {
         this.dataOra = LocalDateTime.now();
     }
 
+    // Constructor pentru reconstituire din baza de date
+    public Consultatie(Medic medic, Pacient pacient, String simptome, LocalDateTime dataOra) {
+        this.medic = medic;
+        this.pacient = pacient;
+        this.simptome = simptome;
+        this.dataOra = dataOra;
+    }
+
     public void setDiagnostic(String diagnostic) {
         if (diagnostic == null || diagnostic.isBlank()) throw new IllegalArgumentException("Diagnosticul nu poate fi gol.");
         this.diagnostic = diagnostic;

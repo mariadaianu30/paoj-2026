@@ -43,3 +43,9 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Sensitive / generated ###
+src/resources/db.properties
+audit.csv
+output/
+rezultate.txt

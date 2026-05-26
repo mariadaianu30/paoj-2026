@@ -1,5 +1,6 @@
 package com.pao.project;
 
+import com.pao.project.audit.AuditService;
 import com.pao.project.exception.MedicNedisponibilException;
 import com.pao.project.exception.PacientNegasitException;
 import com.pao.project.exception.ProgramareConflictException;
@@ -90,6 +91,7 @@ public class Meniu {
     //  1. Inregistreaza pacient
 
     private void inregistreazaPacient() {
+        AuditService.getInstance().log("INREGISTRARE_PACIENT");
         Pacient p = new Pacient();
         p.citeste(scanner);
         try {
@@ -104,6 +106,7 @@ public class Meniu {
     //  2. Adauga medic
 
     private void adaugaMedic() {
+        AuditService.getInstance().log("ADAUGARE_MEDIC");
         try {
             System.out.print("ID Angajat: ");       String idAngajat = scanner.nextLine();
             System.out.print("Nume: ");              String nume      = scanner.nextLine();
@@ -133,6 +136,7 @@ public class Meniu {
     //  3. Creeaza programare — data/ora primul, medici disponibili dupa
 
     private void creeazaProgramare() {
+        AuditService.getInstance().log("CREARE_PROGRAMARE");
         System.out.print("Data si ora dorita (dd.MM.yyyy HH:mm): ");
         String dataOraStr = scanner.nextLine();
         LocalDateTime dataOra;
@@ -198,6 +202,7 @@ public class Meniu {
     //  4. Anuleaza programare
 
     private void anuleazaProgramare() {
+        AuditService.getInstance().log("ANULARE_PROGRAMARE");
         System.out.print("ID programare: ");
         String id = scanner.nextLine();
         try {
@@ -212,6 +217,7 @@ public class Meniu {
     //  5. Efectueaza consultatie
 
     private void efectueazaConsultatie() {
+        AuditService.getInstance().log("EFECTUARE_CONSULTATIE");
         System.out.print("Parafa medic: ");
         String parafa = scanner.nextLine();
         System.out.print("CNP pacient: ");
@@ -257,6 +263,7 @@ public class Meniu {
     //  6. Emite reteta
 
     private void emiteReteta() {
+        AuditService.getInstance().log("EMITERE_RETETA");
         System.out.print("CNP pacient: ");
         String cnp = scanner.nextLine();
         Optional<Pacient> optP = pacientService.cautaDupaCNP(cnp);
@@ -295,6 +302,7 @@ public class Meniu {
     //  7. Cauta pacient
 
     private void cautaPacient() {
+        AuditService.getInstance().log("CAUTARE_PACIENT");
         System.out.print("CNP pacient: ");
         String cnp = scanner.nextLine();
         Optional<Pacient> opt = pacientService.cautaDupaCNP(cnp);
@@ -306,6 +314,7 @@ public class Meniu {
     //  8. Programarile unui medic
 
     private void listeazaProgramariMedic() {
+        AuditService.getInstance().log("LISTARE_PROGRAMARI_MEDIC");
         System.out.print("Parafa medic: ");
         String parafa = scanner.nextLine();
         List<Programare> lista = programareService.getProgramariMedic(parafa);
@@ -320,6 +329,7 @@ public class Meniu {
     //  9. Fisa medicala
 
     private void afiseazaFisaMedicala() {
+        AuditService.getInstance().log("AFISARE_FISA_MEDICALA");
         System.out.print("CNP pacient: ");
         String cnp = scanner.nextLine();
         Optional<Pacient> opt = pacientService.cautaDupaCNP(cnp);
@@ -331,6 +341,7 @@ public class Meniu {
     //  10. Sterge pacient
 
     private void stergePacient() {
+        AuditService.getInstance().log("STERGERE_PACIENT");
         System.out.print("CNP pacient: ");
         String cnp = scanner.nextLine();
         try {
@@ -345,6 +356,7 @@ public class Meniu {
     //  11. Programarile unui pacient
 
     private void listeazaProgramariPacient() {
+        AuditService.getInstance().log("LISTARE_PROGRAMARI_PACIENT");
         System.out.print("CNP pacient: ");
         String cnp = scanner.nextLine();
         if (pacientService.cautaDupaCNP(cnp).isEmpty()) {
@@ -363,6 +375,7 @@ public class Meniu {
     //  12. Ranking medici — general + pe specialitati
 
     private void listeazaMediciDupaRanking() {
+        AuditService.getInstance().log("RANKING_MEDICI");
         List<Medic> general = medicService.listeazaDupaRanking();
         if (general.isEmpty()) {
             System.out.println("Nu exista medici in sistem.");
@@ -409,6 +422,7 @@ public class Meniu {
     //  13. Pacienti pe tip asigurare
 
     private void afiseazaPacientiPeAsigurare() {
+        AuditService.getInstance().log("AFISARE_PACIENTI_PE_ASIGURARE");
         Map<String, List<Pacient>> grupuri = pacientService.grupeazaDupaAsigurare();
         if (grupuri.isEmpty()) {
             System.out.println("Nu exista pacienti in sistem.");
@@ -441,6 +455,7 @@ public class Meniu {
     //  14. Adauga analiza la pacient
 
     private void adaugaAnalizaPacient() {
+        AuditService.getInstance().log("ADAUGARE_ANALIZA_PACIENT");
         System.out.print("CNP pacient: ");
         String cnp = scanner.nextLine();
         Optional<Pacient> optP = pacientService.cautaDupaCNP(cnp);
